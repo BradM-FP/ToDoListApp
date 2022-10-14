@@ -104,5 +104,38 @@ namespace ToDoListApp.Controllers
 
         }
 
+        public IActionResult CompleteTask(int? id)
+        {
+
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var taskFromDb = main_db.ToDo.Find(id);
+
+            if (taskFromDb == null)
+            {
+                return NotFound();
+            }
+
+            if (taskFromDb.IsCompleted)
+            {
+                taskFromDb.IsCompleted = false;
+            }
+            else
+            {
+                taskFromDb.IsCompleted = true;
+            }
+
+            if (ModelState.IsValid)
+            {
+                main_db.ToDo.Update(taskFromDb);
+                main_db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
     }
 }
