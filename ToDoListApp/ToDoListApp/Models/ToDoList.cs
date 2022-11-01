@@ -5,6 +5,7 @@ namespace ToDoListApp.Models
     public class ToDoList
     {
         [Key]
+        
         public int Id { get; set; }
 
         [Required]
@@ -12,6 +13,9 @@ namespace ToDoListApp.Models
 
         [Required]
         public bool IsCompleted { get; set; }
+
+        [Required]
+        public string Name { get; set; }
 
     }
 }

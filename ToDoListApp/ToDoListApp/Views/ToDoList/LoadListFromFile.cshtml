@@ -1,0 +1,29 @@
+﻿@model ToDoList
+@{
+    ViewData["Title"] = "Load List From File";
+}
+
+<form method="Post" enctype="multipart/form-data">
+    <div class="border p-3 mt-4">
+        <div class ="row pb-2">
+            <h2 class="text-primary"> Load List </h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label"> Upload File</label>
+             <input type="file" name="file" class="form-control" />
+        </div>
+
+        <div class ="mb-3">
+             <button type="submit" class ="btn btn-success" style ="width:150px"> Load List </button>
+        </div>
+       
+
+        
+
+        <a asp-controller="ToDoList" asp-action="Index" class="btn btn-warning" style="width:150px">
+        Back to List
+        </a>
+    </div>
+</form>

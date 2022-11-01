@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Data;
 using ToDoListApp.Models;
+using ToDoListApp.FileUploader;
 
 namespace ToDoListApp.Controllers
 {
     public class ToDoListController : Controller
     {
         private readonly ApplicationDBContext main_db;
+        private readonly IFileUploader main_file;
+        public string filePath;
 
-        public ToDoListController(ApplicationDBContext db)
+        public ToDoListController(ApplicationDBContext db, IFileUploader file)
         {
-            main_db = db;   
+            main_db = db;
+            main_file = file;
         }
 
         public IActionResult Index()
@@ -33,6 +38,7 @@ namespace ToDoListApp.Controllers
             if(ModelState.IsValid)
             {
                 main_db.ToDo.Add(obj);
+                
                 main_db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -135,6 +141,47 @@ namespace ToDoListApp.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
+
+
+        public IActionResult LoadListFromFile()
+        { 
+
+            return View();
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LoadListFromFile(IFormFile file)
+        {
+           GetFilePath(file);
+
+            string[] lines = { };
+            //string listFile = "C:\\Code\\Testing\\TestFile.txt";
+            string listFile = filePath;
+            //change to read name and state too
+            lines = System.IO.File.ReadAllLines(listFile);
+
+            for(int i = 0; i < lines.Length; i++)
+            {
+                var newTask = new ToDoList {Task =lines[i], Name = "", IsCompleted = false};
+
+                main_db.Add(newTask);
+                main_db.SaveChanges();
+
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
+        public async void GetFilePath(IFormFile file)
+        {
+            if (file != null)
+            {
+               filePath = await main_file.UploadFile(file);
+            }
         }
 
     }

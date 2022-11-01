@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Data;
+using ToDoListApp.FileUploader;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlSer
                                     (builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<IFileUploader, LocalFileUploadService>();
 
 var app = builder.Build();
 
