@@ -74,25 +74,20 @@
   <br />
 
   <div class="container p-1">
+
         <a asp-controller="ToDoList" asp-action="AddNewTask" class="btn btn-info" style="width:200px">
         Add Additional Task
         </a>
-  </div> 
-@*
-   <div class="container p-1">
-        <a asp-controller="ToDoList" asp-action="SaveList" class="btn btn-info" style="width:200px">
-        Save List
+
+       
+        <a asp-controller="ToDoList" asp-action="ExportList" class="btn btn-info" style="width:200px">
+        Export
         </a>
+
+         <a asp-controller="ToDoList" asp-action="ResetList" class="btn btn-danger" style="width:200px">
+        Delete List
+        </a>
+
+
   </div> 
 
-    <div class="container p-1">
-        <a asp-controller="ToDoList" asp-action="LoadList" class="btn btn-info" style="width:200px">
-        Load List
-        </a>
-  </div> 
-
-     <div class="container p-1">
-        <a asp-controller="ToDoList" asp-action="ResetList" class="btn btn-info" style="width:200px">
-        Reset List
-        </a>
-  </div> *@

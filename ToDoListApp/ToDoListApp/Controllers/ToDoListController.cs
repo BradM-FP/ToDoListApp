@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoListApp.Data;
 using ToDoListApp.Models;
 using ToDoListApp.FileUploader;
+using System.Text;
 
 namespace ToDoListApp.Controllers
 {
@@ -160,7 +161,7 @@ namespace ToDoListApp.Controllers
             string[] lines = { };
             //string listFile = "C:\\Code\\Testing\\TestFile.txt";
             string listFile = filePath;
-            //change to read name and state too
+            //change to loop and read name and state too
             lines = System.IO.File.ReadAllLines(listFile);
 
             for(int i = 0; i < lines.Length; i++)
@@ -182,6 +183,36 @@ namespace ToDoListApp.Controllers
             {
                filePath = await main_file.UploadFile(file);
             }
+        }
+
+        public IActionResult ResetList()
+        {
+
+            IEnumerable<ToDoList> objToDoList = main_db.ToDo;
+
+            main_db.RemoveRange(objToDoList);
+            main_db.SaveChanges();
+
+
+            return RedirectToAction("Index");
+        }
+
+
+        public IActionResult ExportList(string filepath)
+        {
+
+            IEnumerable<ToDoList> objToDoList = main_db.ToDo;
+
+            StringBuilder stringBuild = new StringBuilder();
+
+            stringBuild.AppendLine("Task, Status, name");
+
+            foreach(ToDoList toDo in objToDoList)
+            {
+                stringBuild.AppendLine($"{toDo.Task}, {toDo.IsCompleted}, {toDo.Name}");
+            }
+
+            return File(Encoding.UTF8.GetBytes(stringBuild.ToString()), "text/csv", "ToDoList.csv");
         }
 
     }
