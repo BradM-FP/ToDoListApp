@@ -17,14 +17,17 @@
         <br />
         <div wrapper>
                 <a asp-controller="ToDoList" asp-action="Index" class="btn btn-lg btn-primary" type="button" style="width:500px">
-                    View Your List
+                    View Current List
                 </a>
               
         </div>
         <br />
         <div wrapper>
-                <button class="btn btn-lg btn-primary" type="button" style="width:500px">Reset List</button>
-             
+
+            <a asp-controller="ToDoList" asp-action="LoadTemplate" class="btn btn-lg btn-primary" type="button" style="width:500px">
+
+                Load Template
+             </a>
 
         </div>
 

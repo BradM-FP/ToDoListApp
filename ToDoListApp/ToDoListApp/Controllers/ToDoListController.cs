@@ -137,5 +137,19 @@ namespace ToDoListApp.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult LoadTemplate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult LoadTemplate(ToDoList obj)
+        {
+       
+
+            return View(obj);
+        }
+
     }
 }

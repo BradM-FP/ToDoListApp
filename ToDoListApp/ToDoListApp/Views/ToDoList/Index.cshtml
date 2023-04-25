@@ -13,7 +13,6 @@
   <thead>
     <tr>
       <th scope="col" style="text-align:center; width:350px">Current Tasks</th>
-      <th scope="col" style="text-align:center; width:75px">Task Completed?</th>
       <th scope="col" style="text-align:center; width:75px">Finish Task</th>
       <th scope="col" style="text-align:center; width:75px">Edit Task</th>
       <th scope="col" style="text-align:center; width:75px">Remove Task</th>
@@ -42,12 +41,7 @@
 
                     @obj.Task
                     </td>
-                    }
-                    <td style="text-align:center">     
-                        <div class="form-check">      
-                        <input asp-for="@obj.IsCompleted" type="checkbox" value="@obj.IsCompleted"/>
-                        </div>
-                    </td>
+                    }         
                      <td>
                          <div class="w-50 btn-group" role="group">
                             <a asp-controller="ToDoList" asp-action="CompleteTask" asp-route-id="@obj.Id" class="btn btn-success" > <i class="bi bi-check-circle-fill"> </i> </a> 
@@ -65,40 +59,7 @@
                         </div>
                     </td>
                    
-                </tr>        
-            @*}*@
-           @* else
-            {
-                <tr class="table-secondary" style="text-align:center">
-                    <td style="text-align:center" >      
-                        
-                    
-                    @obj.Task
-                    </td>
-                    <td style="text-align:center">     
-                        <div class="form-check">      
-                        <input asp-for="@obj.IsCompleted" type="checkbox" value="@obj.IsCompleted"/>
-                        </div>
-                    </td>
-                     <td>
-                         <div class="w-50 btn-group" role="group">
-                            <a asp-controller="ToDoList" asp-action="CompleteTask" asp-route-id="@obj.Id" class="btn btn-success" > <i class="bi bi-check-circle-fill"> </i> </a> 
-                        </div>
-                    </td>
-                    <td style="text-align:center">  
-                        <div class="w-50 btn-group" role="group">
-                             <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning"> <i class="bi bi-pencil-square"></i> </a> 
-                        </div>
-                    </td>
-
-                    <td style="text-align:center">
-                        <div class="w-50 btn-group" role="group">
-                            <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger"> <i class="bi bi-x-square-fill"></i> </a> 
-                        </div>
-                    </td>
-                   
-                </tr>
-            }*@
+                </tr>                   
             
             }
   </tbody>
