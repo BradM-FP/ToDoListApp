@@ -23,11 +23,24 @@
      @*going through each row of data*@
       @foreach(var obj in Model)
             {
-           @* @if (obj.IsCompleted)
+            @* @if (obj.IsCompleted)
             {*@
-                <tr style="text-align:center">
-
-                    @if (obj.IsCompleted)
+            <tr style="text-align:center">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (obj.UserName != User.Identity.Name)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    @if(obj.UserName != "Guest")
+                    {
+                        continue;
+                    }
+                }
+                @if (obj.IsCompleted)
                     {
                     <td class="table-primary" style="text-align:center">      
 

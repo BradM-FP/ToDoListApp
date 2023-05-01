@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ToDoListApp.Models
 {
@@ -7,11 +8,15 @@ namespace ToDoListApp.Models
         [Key]
         public int Id { get; set; }
 
+
         [Required]
         public string Task { get; set; }
 
-        [Required]
+        
         public bool IsCompleted { get; set; }
+
+        
+        public string UserName { get; set; }   
 
     }
 }

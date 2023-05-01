@@ -11,7 +11,7 @@ namespace ToDoListApp.Data
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-      
+            
         }
         //This creates the table with the columns inside the model
         public DbSet<ToDoList> ToDo { get; set; }

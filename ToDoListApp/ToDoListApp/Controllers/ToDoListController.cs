@@ -27,17 +27,22 @@ namespace ToDoListApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNewTask(ToDoList obj)
+        public IActionResult AddNewTask(ToDoList obj, String username)
         {
-
-            if(ModelState.IsValid)
+            if(User.Identity.IsAuthenticated)
             {
+                obj.UserName = User.Identity.Name;
+            }
+            else
+            {
+                obj.UserName = "Guest";
+            }
+                
+
                 main_db.ToDo.Add(obj);
                 main_db.SaveChanges();
                 return RedirectToAction("Index");
-            }
 
-            return View(obj);
         }
 
         public IActionResult Edit(int? id)

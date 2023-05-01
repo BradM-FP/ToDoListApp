@@ -8,8 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer
-                                    (builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddDbContext<ToDoListAppContext>(options => options.UseSqlServer
                                     (builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -26,6 +25,10 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequiredLength = 4;
 });
+
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer
+                                    (builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddRazorPages();
 
