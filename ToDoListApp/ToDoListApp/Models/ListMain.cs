@@ -1,0 +1,19 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
+
+    namespace ToDoListApp.Models
+{
+    public class ListMain
+    {
+
+        [Key]
+        public int Id { get; set; }
+
+
+        public string UserName { get; set; }
+
+        public string ListName { get; set; }
+
+
+    }
+}

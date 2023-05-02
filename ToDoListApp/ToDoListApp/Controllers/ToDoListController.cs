@@ -156,5 +156,25 @@ namespace ToDoListApp.Controllers
             return View(obj);
         }
 
+        public IActionResult LoadList(string name)
+        {
+            IEnumerable<ToDoList> objToDoList = main_db.ToDo;
+
+
+            foreach(ToDoList item in objToDoList)
+            {
+                if(item.ListName == name && item.UserName == User.Identity.Name)
+                {
+                    continue;
+                }
+                else
+                {
+                    objToDoList.ToList().Remove(item);
+                }
+            }
+
+            return View(objToDoList);
+        }
+
     }
 }

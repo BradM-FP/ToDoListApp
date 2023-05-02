@@ -16,7 +16,7 @@ namespace ToDoListApp.Data
         //This creates the table with the columns inside the model
         public DbSet<ToDoList> ToDo { get; set; }
 
-
+        public DbSet<ListMain> ListM { get; set; }
 
     }
 

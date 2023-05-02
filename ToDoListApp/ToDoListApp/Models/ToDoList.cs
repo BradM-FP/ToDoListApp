@@ -18,5 +18,7 @@ namespace ToDoListApp.Models
         
         public string UserName { get; set; }   
 
+        public string ListName { get; set; }
+
     }
 }

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ListMain>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1> Your Saved Lists: </h1>
+
+<br />
+
+
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col" style="text-align:center; width:350px">Avaialble Lists</th>
+    </tr>
+  </thead>
+
+  <tbody>
+     @*going through each row of data*@
+
+     @{bool UserHasLists = false;
+      @foreach(var obj in Model)
+            {
+            @* @if (obj.IsCompleted)
+            {*@
+            <tr style="text-align:center">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (obj.UserName == User.Identity.Name)
+                    {
+                        <td>
+                            <div class="w-50 btn-group" role="group">
+                                <a asp-controller="ToDoList" asp-action="LoadList" asp-route-id="@obj.ListName" class="btn btn-success"> <i class="bi bi-check-circle-fill"> </i>
+                                @obj.ListName</a>
+                            </div>
+                        </td>
+                        UserHasLists = true;
+                    }
+                }
+                else
+                {
+                    //@if(obj.UserName != "Guest")
+                    //{
+                    //    continue;
+                    //}
+                    continue;
+                }                                   
+                   
+                </tr>                   
+            
+            }
+            }
+  </tbody>
+
+</table>
+
+  <br />
+
+  <div class="container p-1">
+        <a asp-controller="ToDoList" asp-action="AddNewTask" class="btn btn-info" style="width:200px">
+        Add Additional Task
+        </a>
+  </div> 
