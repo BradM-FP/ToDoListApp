@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using ToDoListApp.Data;
 using ToDoListApp.Models;
 
@@ -156,12 +159,18 @@ namespace ToDoListApp.Controllers
             return View(obj);
         }
 
-        public IActionResult LoadList(string name)
+
+        public IActionResult LoadList(string? name)
         {
             IEnumerable<ToDoList> objToDoList = main_db.ToDo;
 
 
-            foreach(ToDoList item in objToDoList)
+
+            List<ToDoList> tdList = new List<ToDoList>();
+
+            tdList = objToDoList.ToList();
+
+            foreach(ToDoList item in tdList.ToList())
             {
                 if(item.ListName == name && item.UserName == User.Identity.Name)
                 {
@@ -169,11 +178,14 @@ namespace ToDoListApp.Controllers
                 }
                 else
                 {
-                    objToDoList.ToList().Remove(item);
+                    tdList.Remove(item);
                 }
             }
 
-            return View(objToDoList);
+
+
+
+            return View("Index", tdList);
         }
 
     }

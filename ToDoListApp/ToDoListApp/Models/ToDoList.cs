@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ToDoListApp.Models
@@ -16,7 +17,8 @@ namespace ToDoListApp.Models
         public bool IsCompleted { get; set; }
 
         
-        public string UserName { get; set; }   
+        public string UserName { get; set; }
+
 
         public string ListName { get; set; }
 

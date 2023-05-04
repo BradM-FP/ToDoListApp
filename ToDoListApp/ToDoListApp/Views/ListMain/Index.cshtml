@@ -31,7 +31,8 @@
                     {
                         <td>
                             <div class="w-50 btn-group" role="group">
-                                <a asp-controller="ToDoList" asp-action="LoadList" asp-route-id="@obj.ListName" class="btn btn-success"> <i class="bi bi-check-circle-fill"> </i>
+                                
+                                <a asp-controller="ToDoList" asp-action="LoadList" asp-route-name="@obj.ListName" class="btn btn-success"> 
                                 @obj.ListName</a>
                             </div>
                         </td>
