@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +24,16 @@ namespace ToDoListApp.Controllers
             return View(objToDoList);
         }
 
-        public IActionResult AddNewTask()
+        public IActionResult AddNewTask(string currentL)
         {
+            TempData["CurrentList"] = currentL;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNewTask(ToDoList obj, String username)
+        public IActionResult AddNewTask(ToDoList obj, string currentL)
         {
             if(User.Identity.IsAuthenticated)
             {
@@ -40,16 +43,20 @@ namespace ToDoListApp.Controllers
             {
                 obj.UserName = "Guest";
             }
-                
+            
+            obj.ListName = currentL;
 
-                main_db.ToDo.Add(obj);
-                main_db.SaveChanges();
-                return RedirectToAction("Index");
+            main_db.ToDo.Add(obj);
+            main_db.SaveChanges();
+
+            return LoadList(currentL);
 
         }
 
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string currentL)
         {
+            TempData["CurrentList"] = currentL;
+
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -68,19 +75,30 @@ namespace ToDoListApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ToDoList obj)
+        public IActionResult Edit(ToDoList obj, string currentL)
         {
-            if (ModelState.IsValid)
+           obj.ListName= currentL;
+
+            if (User.Identity.IsAuthenticated)
             {
-                main_db.ToDo.Update(obj);
-                main_db.SaveChanges();
-                return RedirectToAction("Index");
+                obj.UserName = User.Identity.Name;
             }
-            return View(obj);
+            else
+            {
+                obj.UserName = "Guest";
+            }
+
+           main_db.ToDo.Update(obj);
+           main_db.SaveChanges();
+
+            return LoadList(currentL);
+
         }
 
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int? id, string currentL)
         {
+            TempData["CurrentList"] = currentL;
+
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -97,7 +115,7 @@ namespace ToDoListApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
+        public IActionResult DeletePost(int? id, string currentL)
         {
             var obj = main_db.ToDo.Find(id);
 
@@ -108,11 +126,11 @@ namespace ToDoListApp.Controllers
 
             main_db.ToDo.Remove(obj);
             main_db.SaveChanges();
-            return RedirectToAction("Index");
+            return LoadList(currentL);
 
         }
 
-        public IActionResult CompleteTask(int? id)
+        public IActionResult CompleteTask(int? id, string currentL)
         {
 
             if (id == null || id == 0)
@@ -140,9 +158,17 @@ namespace ToDoListApp.Controllers
             {
                 main_db.ToDo.Update(taskFromDb);
                 main_db.SaveChanges();
-                return RedirectToAction("Index");
+
+                IEnumerable<ToDoList> objToDoList = main_db.ToDo;
+
+                return LoadList(currentL);
+
             }
-            return RedirectToAction("Index");
+            else
+            {
+                return LoadList(currentL);
+            }
+
         }
 
         public IActionResult LoadTemplate()
@@ -164,15 +190,18 @@ namespace ToDoListApp.Controllers
         {
             IEnumerable<ToDoList> objToDoList = main_db.ToDo;
 
+            return View("Index", GetList(objToDoList, name));
+        }
 
-
+        public List<ToDoList> GetList(IEnumerable<ToDoList> objToDoList, string name )
+        {
             List<ToDoList> tdList = new List<ToDoList>();
 
             tdList = objToDoList.ToList();
 
-            foreach(ToDoList item in tdList.ToList())
+            foreach (ToDoList item in tdList.ToList())
             {
-                if(item.ListName == name && item.UserName == User.Identity.Name)
+                if (item.ListName == name && item.UserName == User.Identity.Name)
                 {
                     continue;
                 }
@@ -182,11 +211,9 @@ namespace ToDoListApp.Controllers
                 }
             }
 
-
-
-
-            return View("Index", tdList);
+            return tdList;
         }
+
 
     }
 }

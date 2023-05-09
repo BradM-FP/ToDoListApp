@@ -1,9 +1,12 @@
 ﻿@model ToDoList
-@{
+@*@{
     ViewData["Title"] = "Add New Task";
-}
+}*@
 
-<form method="Post" asp-action="AddNewTask">
+
+<h1>Add a New Task to Your @TempData["CurrentList"] List</h1>
+
+<form method="Post" asp-action="AddNewTask" asp-route-currentL="@TempData["CurrentList"]">
     <div class="border p-3 mt-4">
         <div class ="row pb-2">
             <h2 class="text-primary"> Create Task</h2>
@@ -17,16 +20,9 @@
         </div>
         <button type="submit" class ="btn btn-success" style ="width:150px"> Add Task </button>
 
-        @if(User.Identity.IsAuthenticated)
-        {
-            <a asp-controller="ToDoList" asp-action="AddNewTask" asp-route-username="@User.Identity.Name"></a>
-        }
-        else
-        {
-            string str = "guest";
-            <a asp-controller="ToDoList" asp-action="AddNewTask" asp-route-username="@str"></a>
-        }
-        <a asp-controller="ToDoList" asp-action="Index" class="btn btn-warning" style="width:150px">
+@*        <a asp-controller="ToDoList" asp-action="AddNewTask" asp-route-currentL="Test"> </a>*@
+
+        <a asp-controller="ToDoList" asp-action="LoadList" asp-route-name="@TempData["CurrentList"]" class="btn btn-warning" style="width:150px">
         Back to List
         </a>
     </div>

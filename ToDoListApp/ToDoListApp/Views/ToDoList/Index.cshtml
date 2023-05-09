@@ -3,7 +3,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1> Your To-Do List </h1>
+@{
+    string currentListName = new string("");
+}
+
+        @if (Model.ElementAt(0) != null && Model.ElementAt(0).ListName != "")
+        {
+           <h1> @Model.ElementAt(0).ListName.ToString()</h1>
+                currentListName = @Model.ElementAt(0).ListName.ToString();
+        }
+        else
+        {
+            <h1> No List Here </h1>
+        }
+      
 
 <br />
 
@@ -57,19 +70,19 @@
                     }         
                      <td>
                          <div class="w-50 btn-group" role="group">
-                            <a asp-controller="ToDoList" asp-action="CompleteTask" asp-route-id="@obj.Id" class="btn btn-success" > <i class="bi bi-check-circle-fill"> </i> </a> 
-                        </div>
+                        <a asp-controller="ToDoList" asp-action="CompleteTask" asp-route-id="@obj.Id" asp-route-currentL="@currentListName" class="btn btn-success"> <i class="bi bi-check-circle-fill"> </i> </a>
+                    </div>
                     </td>
                     <td style="text-align:center">  
                         <div class="w-50 btn-group" role="group">
-                             <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-warning"> <i class="bi bi-pencil-square"></i> </a> 
+                             <a asp-controller="ToDoList" asp-action="Edit" asp-route-id="@obj.Id" asp-route-currentL="@currentListName" class="btn btn-warning"> <i class="bi bi-pencil-square"></i> </a> 
                         </div>
                     </td>
 
                     <td style="text-align:center">
                         <div class="w-50 btn-group" role="group">
-                            <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger"> <i class="bi bi-x-square-fill"></i> </a> 
-                        </div>
+                        <a asp-controller="ToDoList" asp-action="Delete" asp-route-id="@obj.Id" asp-route-currentL="@currentListName" class="btn btn-danger"> <i class="bi bi-x-square-fill"></i> </a>
+                    </div>
                     </td>
                    
                 </tr>                   
@@ -82,7 +95,7 @@
   <br />
 
   <div class="container p-1">
-        <a asp-controller="ToDoList" asp-action="AddNewTask" class="btn btn-info" style="width:200px">
+        <a asp-controller="ToDoList" asp-action="AddNewTask" asp-route-currentL="@currentListName" class="btn btn-info" style="width:200px">
         Add Additional Task
         </a>
   </div> 

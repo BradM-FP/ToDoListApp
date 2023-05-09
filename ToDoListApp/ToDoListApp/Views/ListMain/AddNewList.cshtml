@@ -1,0 +1,20 @@
+﻿@model ListMain
+
+<h1> Create a New List</h1>
+
+<form method="Post" asp-action="AddNewList">
+    <div class="border p-3 mt-4">
+        <div class ="row pb-2">
+            <h2 class="text-primary"> Name of the new list: </h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ListName"></label>
+            <input asp-for="ListName" class="form-control" />
+            <span asp-validation-for="ListName" class="text-danger"></span>
+        </div>
+        <button type="submit" class ="btn btn-success" style ="width:150px"> Create New List </button>
+
+    </div>
+</form>

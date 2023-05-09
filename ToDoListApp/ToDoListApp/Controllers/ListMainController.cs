@@ -15,84 +15,29 @@ namespace ToDoListApp.Controllers
         }
 
         // GET: ListMainController
-        public ActionResult Index()
+        public IActionResult Index()
         {
             IEnumerable<ListMain> objToDoList = main_db.ListM;
 
             return View(objToDoList);
         }
 
-        // GET: ListMainController/Details/5
-        public ActionResult Details(int id)
+
+        public IActionResult CreateNewList()
         {
             return View();
         }
 
-        // GET: ListMainController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ListMainController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult CreateNewList(ListMain obj)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+
+            main_db.ListM.Add(obj);
+            main_db.SaveChanges();
+            return View(obj);
         }
 
-        // GET: ListMainController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ListMainController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ListMainController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ListMainController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-        
 
     }
 }

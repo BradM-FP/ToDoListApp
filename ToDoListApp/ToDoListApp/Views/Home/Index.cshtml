@@ -5,40 +5,32 @@
 
 
 <div class="text-center">
-    <h1 class="display-4">To Do List App</h1>
+    <h1 class="display-4">To Do List </h1>
     <br />
     <div class="d-grid gap-2">
 
-        <div wrapper> 
-
-                <button class="btn btn-lg btn-primary" type="button" style="width:500px"> Sign In </button> 
-               
+        <div wrapper>
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-lg btn-primary" type="button" style="width:500px"> Sign In </a>             
         </div>
         <br />
-        <div wrapper>
-                <a asp-controller="ToDoList" asp-action="Index" class="btn btn-lg btn-primary" type="button" style="width:500px">
-                    View Current List
-                </a>
-              
-        </div>
-        <br />
-        <div wrapper>
 
-            <a asp-controller="ListMain" asp-action="Index" class="btn btn-lg btn-primary" type="button" style="width:500px">
-
-                View Lists
-            </a>
+        <div wrapper>
+            <a asp-controller="ListMain" asp-action="AddNewList" class="btn btn-lg btn-primary" type="button" style="width:500px"> Create New List </a>
 
         </div>
         <br />
+
         <div wrapper>
-
-            <a asp-controller="ToDoList" asp-action="LoadTemplate" class="btn btn-lg btn-primary" type="button" style="width:500px">
-
-                Load Template
-             </a>
+            <a asp-controller="ListMain" asp-action="Index" class="btn btn-lg btn-primary" type="button" style="width:500px"> View Lists </a>
 
         </div>
+        <br />
+
+        <div wrapper>
+            <a asp-controller="ToDoList" asp-action="LoadTemplate" class="btn btn-lg btn-primary" type="button" style="width:500px"> Load Template </a>
+        </div>
+
+
 
               
        
