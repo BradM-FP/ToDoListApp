@@ -20,11 +20,14 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        <li class="nav-item">                         
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ToDoList" asp-action="Index">To Do List</a>
+                            <a class="nav-link text-dark"  asp-controller="ListMain" asp-action="Index"> View Lists </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="ToDoList" asp-action="LoadTemplate"> Load Template </a>
                         </li>
                     </ul>
                     <Partial name="_LoginPartial" />

@@ -12644,3 +12644,12 @@ legend {
 .list-group-item .h6 {
     color: inherit;
 }
+
+.wrapper{
+    text-align: center
+}
+
+.button{
+    position: absolute;
+        top: 50%;
+}

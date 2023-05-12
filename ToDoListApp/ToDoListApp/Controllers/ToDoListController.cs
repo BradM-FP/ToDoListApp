@@ -14,14 +14,15 @@ namespace ToDoListApp.Controllers
 
         public ToDoListController(ApplicationDBContext db)
         {
-            main_db = db;   
+            main_db = db;
+
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string currentL)
         {
-            IEnumerable<ToDoList> objToDoList = main_db.ToDo;
+            TempData["CurrentList"] = currentL;
 
-            return View(objToDoList);
+            return LoadList(currentL);
         }
 
         public IActionResult AddNewTask(string currentL)
@@ -132,7 +133,7 @@ namespace ToDoListApp.Controllers
 
         public IActionResult CompleteTask(int? id, string currentL)
         {
-
+            TempData["CurrentList"] = currentL;
             if (id == null || id == 0)
             {
                 return NotFound();
@@ -158,8 +159,6 @@ namespace ToDoListApp.Controllers
             {
                 main_db.ToDo.Update(taskFromDb);
                 main_db.SaveChanges();
-
-                IEnumerable<ToDoList> objToDoList = main_db.ToDo;
 
                 return LoadList(currentL);
 
@@ -188,6 +187,8 @@ namespace ToDoListApp.Controllers
 
         public IActionResult LoadList(string? name)
         {
+            TempData["CurrentList"] = name;
+
             IEnumerable<ToDoList> objToDoList = main_db.ToDo;
 
             return View("Index", GetList(objToDoList, name));
@@ -199,18 +200,34 @@ namespace ToDoListApp.Controllers
 
             tdList = objToDoList.ToList();
 
-            foreach (ToDoList item in tdList.ToList())
+            if (User.Identity.IsAuthenticated)
             {
-                if (item.ListName == name && item.UserName == User.Identity.Name)
+                foreach (ToDoList item in tdList.ToList())
                 {
-                    continue;
-                }
-                else
-                {
-                    tdList.Remove(item);
+                    if (item.ListName == name && item.UserName == User.Identity.Name)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        tdList.Remove(item);
+                    }
                 }
             }
-
+            else
+            {
+                foreach (ToDoList item in tdList.ToList())
+                {
+                    if (item.ListName == name && item.UserName == "Guest")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        tdList.Remove(item);
+                    }
+                }
+            }
             return tdList;
         }
 

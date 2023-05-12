@@ -23,15 +23,23 @@ namespace ToDoListApp.Controllers
         }
 
 
-        public IActionResult CreateNewList()
+        public IActionResult AddNewList()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateNewList(ListMain obj)
+        public IActionResult AddNewList(ListMain obj)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                obj.UserName = User.Identity.Name;
+            }
+            else
+            {
+                obj.UserName = "Guest";
+            }
 
             main_db.ListM.Add(obj);
             main_db.SaveChanges();

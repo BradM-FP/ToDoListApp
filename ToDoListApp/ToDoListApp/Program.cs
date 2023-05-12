@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-
+//For Identity scaffolding
 builder.Services.AddDbContext<ToDoListAppContext>(options => options.UseSqlServer
                                     (builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -26,6 +26,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 4;
 });
 
+//For main database tables
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer
                                     (builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -38,7 +39,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -55,5 +55,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
 
 app.Run();

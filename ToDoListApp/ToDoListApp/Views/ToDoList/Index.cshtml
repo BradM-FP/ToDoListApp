@@ -7,10 +7,10 @@
     string currentListName = new string("");
 }
 
-        @if (Model.ElementAt(0) != null && Model.ElementAt(0).ListName != "")
+        @if (@TempData["CurrentList"] != null)
         {
-           <h1> @Model.ElementAt(0).ListName.ToString()</h1>
-                currentListName = @Model.ElementAt(0).ListName.ToString();
+             <h1> @TempData["CurrentList"] </h1>
+             currentListName = TempData["CurrentList"].ToString();
         }
         else
         {
@@ -36,10 +36,8 @@
      @*going through each row of data*@
       @foreach(var obj in Model)
             {
-            @* @if (obj.IsCompleted)
-            {*@
             <tr style="text-align:center">
-                @if (User.Identity.IsAuthenticated)
+                @*@if (User.Identity.IsAuthenticated)
                 {
                     @if (obj.UserName != User.Identity.Name)
                     {
@@ -48,23 +46,17 @@
                 }
                 else
                 {
-                    @if(obj.UserName != "Guest")
-                    {
-                        continue;
-                    }
-                }
+                   
+                }*@
                 @if (obj.IsCompleted)
                     {
-                    <td class="table-primary" style="text-align:center">      
-
-                    
+                    <td class="table-primary" style="text-align:center">                         
                     @obj.Task
                     </td>
                     }
                     else
                     {
                     <td class="table-secondary" style="text-align:center">      
-
                     @obj.Task
                     </td>
                     }         
