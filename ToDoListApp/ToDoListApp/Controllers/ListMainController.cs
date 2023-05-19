@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using ToDoListApp.Data;
 using ToDoListApp.Models;
 
@@ -46,6 +47,14 @@ namespace ToDoListApp.Controllers
             return View(obj);
         }
 
+        public IActionResult LoadTemplate(string templateName)
+        {
+            string[] templates = Directory.GetFiles("templates");
+
+
+
+            return View();
+        }
 
     }
 }

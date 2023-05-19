@@ -22,11 +22,14 @@
 
 
 
+
+
+
 <table class="table table-hover">
   <thead>
     <tr>
       <th scope="col" style="text-align:center; width:350px">Current Tasks</th>
-      <th scope="col" style="text-align:center; width:75px">Finish Task</th>
+      <th scope="col" style="text-align:center; width:75px">Update Task</th>
       <th scope="col" style="text-align:center; width:75px">Edit Task</th>
       <th scope="col" style="text-align:center; width:75px">Remove Task</th>
     </tr>
@@ -37,29 +40,24 @@
       @foreach(var obj in Model)
             {
             <tr style="text-align:center">
-                @*@if (User.Identity.IsAuthenticated)
+                @if(obj.ImportantTask)
                 {
-                    @if (obj.UserName != User.Identity.Name)
-                    {
-                        continue;
-                    }
-                }
-                else
+                    <td class="table-warning" style="text-align:center">
+                        @obj.Task
+                    </td>
+                }            
+                else if (obj.IsCompleted)
                 {
-                   
-                }*@
-                @if (obj.IsCompleted)
-                    {
                     <td class="table-primary" style="text-align:center">                         
                     @obj.Task
                     </td>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <td class="table-secondary" style="text-align:center">      
                     @obj.Task
                     </td>
-                    }         
+                }         
                      <td>
                          <div class="w-50 btn-group" role="group">
                         <a asp-controller="ToDoList" asp-action="CompleteTask" asp-route-id="@obj.Id" asp-route-currentL="@currentListName" class="btn btn-success"> <i class="bi bi-check-circle-fill"> </i> </a>

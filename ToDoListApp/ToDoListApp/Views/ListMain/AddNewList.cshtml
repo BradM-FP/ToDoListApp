@@ -1,6 +1,6 @@
 ﻿@model ListMain
 
-<h1> Create a New List</h1>
+<h1 style="text-align:center"> Create a New List</h1>
 
 <form method="Post" asp-action="AddNewList">
     <div class="border p-3 mt-4">
@@ -21,7 +21,7 @@
         }
         else
         {
-            <h3> You're not currently signed in. Sign in to save your own lists or use the public list below.</h3>
+            <h3 style="text-align:center"> You're not currently signed in. Sign in to save your own lists or use the public list below.</h3>
             <br />
             <div class="wrapper">
                 <a asp-controller="ToDoList" asp-action="Index" asp-route-currentL="Guest List" type="button" style="width:500px" class="btn btn-success">

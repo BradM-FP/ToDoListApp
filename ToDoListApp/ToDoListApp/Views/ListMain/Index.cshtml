@@ -5,11 +5,11 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h1> Hello @User.Identity.Name . These are your current lists.</h1>
+    <h1 style="text-align:center"> Hello @User.Identity.Name . These are your current lists.</h1>
 }
 else
 {
-    <h1>You're currenty not signed in. Please sign in or use the public list</h1>
+    <h1 style="text-align:center">You're currenty not signed in. Please sign in or use the public list</h1>
 }
 
 

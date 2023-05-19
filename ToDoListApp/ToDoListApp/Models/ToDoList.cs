@@ -22,5 +22,10 @@ namespace ToDoListApp.Models
 
         public string ListName { get; set; }
 
+        public bool ImportantTask { get; set; }
+
+        [BindProperty]
+        public DateTime FinishByDate { get; set; }   
+
     }
 }
