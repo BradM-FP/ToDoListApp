@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ToDoListApp.Areas.Identity.Data;
 using ToDoListApp.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Data.SqlClient;
 
 namespace ToDoListApp.Data
 {
@@ -17,6 +18,7 @@ namespace ToDoListApp.Data
         public DbSet<ToDoList> ToDo { get; set; }
 
         public DbSet<ListMain> ListM { get; set; }
+
 
     }
 

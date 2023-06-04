@@ -1,18 +1,39 @@
-﻿@model ToDoList
+﻿@model IEnumerable<ListMain>
 @{
     ViewData["Title"] = "Load New Template";
 }
 
 
-<form method="Post">
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2 class="text-primary"> Select Template</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col" style="text-align:center; width:350px">Available Lists</th>
+        </tr>
+    </thead>
 
-            <a asp-controller="ListMain" asp-action="LoadTemplate" class="btn btn-lg btn-primary" type="button" style="width:500px">  </a>
-            
-            <hr />
-        </div>
+    <tbody>
+        @*going through each row of data*@
 
+        @{
+            @foreach (var obj in Model)
+            {
+                <tr style="text-align:center">
+                    
+                       
+                            <td>
+                                <div class="w-50 btn-group" role="group">
 
-</form>
+                                    <a asp-controller="ToDoList" asp-action="LoadTemplate" asp-route-templateName="@obj.ListName" class="btn btn-success">
+                                        @obj.ListName
+                                    </a>
+                                </div>
+                            </td>
+                    }
+
+                </tr>
+
+            }
+        }
+    </tbody>
+
+</table>

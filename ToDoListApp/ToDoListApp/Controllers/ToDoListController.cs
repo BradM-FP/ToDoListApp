@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using ToDoListApp.Data;
 using ToDoListApp.Models;
@@ -131,6 +132,20 @@ namespace ToDoListApp.Controllers
 
         }
 
+        public IActionResult DeleteList(string listName)
+        {
+
+            foreach (ToDoList obj in main_db.ToDo) 
+            {
+                if(obj.ListName == listName && obj.UserName == User.Identity.Name)
+                {
+                    main_db.ToDo.Remove(obj);
+                }
+            }
+            main_db.SaveChanges();
+            return RedirectToAction("Index", "Home", null);
+        }
+
         public IActionResult CompleteTask(int? id, string currentL)
         {
             TempData["CurrentList"] = currentL;
@@ -170,18 +185,27 @@ namespace ToDoListApp.Controllers
 
         }
 
-        public IActionResult LoadTemplate()
+        public IActionResult LoadTemplate(string templateName)
         {
-            return View();
+            TempData["TemplateName"] = templateName;
+
+            return View("LoadTemplate", GetListFromTemplate(templateName));
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult LoadTemplate(ToDoList obj)
+        public IActionResult SaveTemplate(string templateName, string listName) 
         {
-       
+            List<ToDoList> tdList = new List<ToDoList>();
 
-            return View(obj);
+            tdList = GetListFromTemplate(templateName);
+
+            foreach (ToDoList obj in tdList)
+            {
+                obj.ListName = listName;
+                main_db.Add(obj);
+                main_db.SaveChanges();
+            }
+
+            return LoadList(tdList[0].ListName);
         }
 
 
@@ -231,6 +255,33 @@ namespace ToDoListApp.Controllers
             return tdList;
         }
 
+        public List<ToDoList> GetListFromTemplate(string templateName)
+        {
+            string filepath = "wwwroot/Templates/" + templateName + ".txt";
+
+            var lines = System.IO.File.ReadAllLines(filepath);
+
+            List<ToDoList> tdList = new List<ToDoList>();
+
+            foreach (string line in lines)
+            {
+                ToDoList obj = new ToDoList();
+                obj.Task = line;
+                obj.ListName = templateName;
+                if (User.Identity.IsAuthenticated)
+                {
+                    obj.UserName = User.Identity.Name;
+                }
+                else
+                {
+                    obj.UserName = "guest";
+                }
+
+                tdList.Add(obj);
+            }
+
+            return tdList;
+        }
 
     }
 }
