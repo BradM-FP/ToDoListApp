@@ -53,11 +53,35 @@ namespace ToDoListApp.Controllers
         public IActionResult LoadTemplate()
         {
 
-            string[] templates = Directory.GetFiles("wwwroot/Templates");
+            List<string> templates = new List<string>();
+
+            string[] tempList = Directory.GetFiles("wwwroot/Templates");
+
+            foreach(string str in tempList)
+            {
+                templates.Add(str);
+            }
+            
+
+            //Checking if user is signed in, then if they have any custom templates
+            if(User.Identity.IsAuthenticated)
+            {
+                if (Directory.Exists("wwwroot/Templates/" + User.Identity.Name))
+                {
+                    string[] userTemplates = Directory.GetFiles("wwwroot/Templates/" + User.Identity.Name);
+
+                    foreach(string str in userTemplates)
+                    {
+                        templates.Add(str);
+                    }
+               
+                }
+                
+            }
 
             List<ListMain> files = new List<ListMain>();
 
-
+            //Renaming read files to remove .txt and adding them to a list to return
             foreach (string filePath in templates)
             {
                 string fileWithoutTxt = filePath;

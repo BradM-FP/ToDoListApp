@@ -19,11 +19,11 @@ namespace ToDoListApp.Controllers
 
         }
 
-        public IActionResult Index(string currentL)
+        public IActionResult Index(string currentL, int tableType = 0)
         {
             TempData["CurrentList"] = currentL;
 
-            return LoadList(currentL);
+            return LoadList(currentL, tableType);
         }
 
         public IActionResult AddNewTask(string currentL)
@@ -208,17 +208,55 @@ namespace ToDoListApp.Controllers
             return LoadList(tdList[0].ListName);
         }
 
+        public IActionResult SaveAsTemplate(string listName) 
+        {
+            string filepath;
+            //If user is signed in, check if they already have a custom directory for templates, if not, create one
+            if(User.Identity.IsAuthenticated) 
+            {
+                filepath = "wwwroot/Templates/" + User.Identity.Name;
 
-        public IActionResult LoadList(string? name)
+                if (!Directory.Exists(filepath))
+                {
+                    Directory.CreateDirectory(filepath);
+                }
+
+                filepath = filepath + "/" + listName + ".txt";
+            }
+            else
+            {
+                filepath = "wwwroot/Templates/" + listName + ".txt";
+
+            }
+
+            //Write the tasks to the new template text file
+            using (StreamWriter writer = System.IO.File.CreateText(filepath))
+            {
+                foreach(ToDoList obj in main_db.ToDo )
+                {
+                    if(obj.ListName == listName && User.Identity.Name == obj.UserName)                 
+                    {
+                        writer.WriteLine(obj.Task);
+                    }
+                    
+                }
+            }
+
+            return RedirectToAction("Index", "Home", null);
+        }
+
+        public IActionResult LoadList(string? name, int tableType = 0)
         {
             TempData["CurrentList"] = name;
 
             IEnumerable<ToDoList> objToDoList = main_db.ToDo;
 
-            return View("Index", GetList(objToDoList, name));
+            return View("Index", GetList(objToDoList, name, tableType));
+
+
         }
 
-        public List<ToDoList> GetList(IEnumerable<ToDoList> objToDoList, string name )
+        public List<ToDoList> GetList(IEnumerable<ToDoList> objToDoList, string name, int tableType = 0 )
         {
             List<ToDoList> tdList = new List<ToDoList>();
 
@@ -226,10 +264,40 @@ namespace ToDoListApp.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
+                //Getting accurate list of tasks depending on list chosen. Removes them from list if they don't belong to the user
                 foreach (ToDoList item in tdList.ToList())
                 {
                     if (item.ListName == name && item.UserName == User.Identity.Name)
                     {
+                        switch(tableType)
+                        {
+                            case 0:
+                                continue;
+                            case 1:
+                                if(!item.ImportantTask)
+                                {
+                                    tdList.Remove(item);
+                                    continue;
+                                }
+                                else
+                                {
+                                    continue;
+                                }                  
+                            case 2:
+                                if(DateTime.Compare(item.FinishByDate, DateTime.Today) <= 0 && item.FinishByDate != DateTime.Parse("0001-01-01 00:00:00.0000000"))
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    tdList.Remove(item);
+                                    continue;
+                                }
+
+                            default:
+                                break;
+                        }
+                       
                         continue;
                     }
                     else
@@ -240,6 +308,7 @@ namespace ToDoListApp.Controllers
             }
             else
             {
+                //Getting list for a "Guest", aka not signed in.
                 foreach (ToDoList item in tdList.ToList())
                 {
                     if (item.ListName == name && item.UserName == "Guest")
@@ -255,14 +324,41 @@ namespace ToDoListApp.Controllers
             return tdList;
         }
 
+
+
         public List<ToDoList> GetListFromTemplate(string templateName)
         {
-            string filepath = "wwwroot/Templates/" + templateName + ".txt";
+
+            string filepath;
+            //Checking the directory for the template chosen exists, if not it's probably a custom list so check the users folder.
+            if (System.IO.File.Exists("wwwroot/Templates/" + templateName + ".txt"))
+            {
+                filepath = "wwwroot/Templates/" + templateName + ".txt";
+            }
+            else
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    if (Directory.Exists("wwwroot/Templates/" + User.Identity.Name))
+                    {
+                        filepath = "wwwroot/Templates/" + User.Identity.Name + "/" + templateName + ".txt";
+                    }
+                    else
+                    {
+                        filepath = "No List Found";
+                    }
+                }
+                else
+                {
+                    filepath = "No List Found";
+                }
+            }
+            
 
             var lines = System.IO.File.ReadAllLines(filepath);
 
             List<ToDoList> tdList = new List<ToDoList>();
-
+            //Write the template to a list so that it can be displayed to the user.
             foreach (string line in lines)
             {
                 ToDoList obj = new ToDoList();
@@ -282,6 +378,7 @@ namespace ToDoListApp.Controllers
 
             return tdList;
         }
+
 
     }
 }

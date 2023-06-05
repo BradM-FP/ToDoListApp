@@ -22,7 +22,20 @@
 
 
 
+<div class="container p-1">
+    <a asp-controller="ToDoList" asp-action="Index" asp-route-currentL="@currentListName" asp-route-tableType=0 class="btn btn-outline-info" style="width:200px">
+        Full List
+    </a>
 
+
+    <a asp-controller="ToDoList" asp-action="Index" asp-route-currentL="@currentListName" asp-route-tableType=1 class="btn btn-outline-info" style="width:200px">
+        Important Tasks
+    </a>
+
+    <a asp-controller="ToDoList" asp-action="Index" asp-route-currentL="@currentListName" asp-route-tableType=2 class="btn btn-outline-info" style="width:200px">
+        Overdue Tasks
+    </a>
+</div>
 
 
 <table class="table table-hover">
@@ -40,13 +53,13 @@
       @foreach(var obj in Model)
             {
             <tr style="text-align:center">
-                @if(obj.ImportantTask)
+                @*@if(obj.ImportantTask)
                 {
                     <td class="table-warning" style="text-align:center">
                         @obj.Task
                     </td>
-                }            
-                else if (obj.IsCompleted)
+                }    *@        
+                @if (obj.IsCompleted)
                 {
                     <td class="table-primary" style="text-align:center">                         
                     @obj.Task
@@ -54,7 +67,7 @@
                 }
                 else
                 {
-                    <td class="table-secondary" style="text-align:center">      
+                    <td class="table-light" style="text-align:center">      
                     @obj.Task
                     </td>
                 }         
@@ -89,7 +102,12 @@
         Add Additional Task
         </a>
 
-        <a asp-controller="ListMain" asp-action="DeleteList" asp-route-listName="@currentListName" class="btn btn-danger" style="width:200px">
-        Delete List
+
+        <a asp-controller="ToDoList" asp-action="SaveAsTemplate" asp-route-listObj="@Model" asp-route-listName="@currentListName" class="btn btn-info" style="width:200px">
+        Save as a Template
         </a>
+
+    <a asp-controller="ListMain" asp-action="DeleteList" asp-route-listName="@currentListName" class="btn btn-danger" style="width:200px">
+        Delete List
+    </a>
   </div> 

@@ -21,6 +21,12 @@
             <input asp-for="ImportantTask" class="form-check-input" type="checkbox" />
         </div>
         <br />
+        <div class="form-control">
+            <label asp-for="FinishByDate" class="form-check-label">Finish By:</label>
+            <input asp-for="FinishByDate" asp-format="{0:dd/MM/yyy HH:mm}" type="date" />
+
+        </div>
+        <br />
 
 
         <button type="submit" class ="btn btn-success" style ="width:150px"> Update Task </button>

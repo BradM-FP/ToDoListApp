@@ -25,6 +25,7 @@ namespace ToDoListApp.Models
         public bool ImportantTask { get; set; }
 
         [BindProperty]
+        [DataType(DataType.Date)]
         public DateTime FinishByDate { get; set; }   
 
     }
