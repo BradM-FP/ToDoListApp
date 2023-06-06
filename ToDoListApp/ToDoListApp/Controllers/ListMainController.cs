@@ -9,6 +9,7 @@ using ToDoListApp.Models;
 
 namespace ToDoListApp.Controllers
 {
+    //This controller manages the main list names and who they are saved to, not the detail of the lists.
     public class ListMainController : Controller
     {
         private readonly ApplicationDBContext main_db;
@@ -34,7 +35,7 @@ namespace ToDoListApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNewList(ListMain obj, string currentL)
+        public IActionResult AddNewList(ListMain obj)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -45,9 +46,61 @@ namespace ToDoListApp.Controllers
                 obj.UserName = "Guest";
             }
 
-            main_db.ListM.Add(obj);
-            main_db.SaveChanges();
-            return RedirectToAction("Index", new RouteValueDictionary(new { controller = "ToDoList", action ="Index", currentL = obj.ListName }));
+            if (ModelState.IsValid)
+            {
+                main_db.ListM.Add(obj);
+                main_db.SaveChanges();
+                return RedirectToAction("Index", new RouteValueDictionary(new { controller = "ToDoList", action = "Index", currentL = obj.ListName }));
+            }
+
+            return View();
+        }
+
+        public IActionResult Edit(int? id, string currentListName)
+        {
+            TempData["CurrentListName"] = currentListName;
+
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var taskFromDb = main_db.ListM.Find(id);
+
+
+            if (taskFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(taskFromDb);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(ListMain obj, string currentListName)
+        {
+            TempData["CurrentListName"] = currentListName;
+            ////Asign owner of list
+            if (User.Identity.IsAuthenticated)
+            {
+                obj.UserName = User.Identity.Name;
+            }
+            else
+            {
+                obj.UserName = "Guest";
+            }
+
+            if (ModelState.IsValid)
+            {
+                main_db.ListM.Update(obj);
+                main_db.SaveChanges();
+
+                return RedirectToAction("UpdateListName", new RouteValueDictionary(new { controller = "ToDoList", action = "UpdateListName", newListName = obj.ListName, currentListName = currentListName }));
+            }
+
+            return View();
+
         }
 
         public IActionResult LoadTemplate()
@@ -144,6 +197,19 @@ namespace ToDoListApp.Controllers
             main_db.SaveChanges();
 
             return RedirectToAction("DeleteList", new RouteValueDictionary(new { controller = "ToDoList", action = "DeleteList", listName = listName }));
+        }
+
+        public IActionResult SaveAsTemplate(string templateName)
+        {
+            TempData["TemplateName"] = templateName;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SaveAsTemplate(ListMain obj, string templateName)
+        {
+            return RedirectToAction("SaveAsTemplate", new RouteValueDictionary(new { controller = "ToDoList", action = "SaveAsTemplate", listName = obj.ListName, templateName = templateName }));
         }
 
     }

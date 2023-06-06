@@ -5,11 +5,11 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h1 style="text-align:center"> Hello @User.Identity.Name . These are your current lists.</h1>
+    <h1 style="text-align:center"> Welcome, @User.Identity.Name. These are your saved lists.</h1>
 }
 else
 {
-    <h1 style="text-align:center">You're currenty not signed in. Please sign in or use the public list</h1>
+    <h1 style="text-align:center">Please sign in or use the public list</h1>
 }
 
 
@@ -21,6 +21,7 @@ else
   <thead>
     <tr>
       <th scope="col" style="text-align:center; width:350px">Available Lists</th>
+      <th scope="col" style="text-align:center; width:100px">Edit List</th>
     </tr>
   </thead>
 
@@ -42,6 +43,12 @@ else
                                 
                                 <a asp-controller="ToDoList" asp-action="Index" asp-route-currentL="@obj.ListName" class="btn btn-success"> 
                                 @obj.ListName</a>
+                            </div>
+                        </td>
+
+                        <td style="text-align:center">
+                            <div class="w-500 btn-group" role="group">
+                                <a asp-controller="ListMain" asp-action="Edit" asp-route-id="@obj.Id" asp-route-currentListName="@obj.ListName" class="btn btn-warning"> <i class="bi bi-pencil-square"></i> </a>
                             </div>
                         </td>
                         UserHasLists = true;

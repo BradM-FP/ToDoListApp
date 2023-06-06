@@ -10,8 +10,9 @@ using System.Diagnostics.CodeAnalysis;
         public int Id { get; set; }
 
 
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
 
+        [Required(ErrorMessage = "Please Enter Name of the List")]
         public string ListName { get; set; }
 
 

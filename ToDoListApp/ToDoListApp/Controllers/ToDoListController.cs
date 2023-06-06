@@ -37,7 +37,13 @@ namespace ToDoListApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddNewTask(ToDoList obj, string currentL)
         {
-            if(User.Identity.IsAuthenticated)
+            TempData["CurrentList"] = currentL;
+
+            //Assign name of list the task will be saved to.
+            obj.ListName = currentL;
+
+            //Asign owner of new task
+            if (User.Identity.IsAuthenticated)
             {
                 obj.UserName = User.Identity.Name;
             }
@@ -45,14 +51,25 @@ namespace ToDoListApp.Controllers
             {
                 obj.UserName = "Guest";
             }
-            
-            obj.ListName = currentL;
 
-            main_db.ToDo.Add(obj);
-            main_db.SaveChanges();
+            //If no date has been selected, assign it the default value
+            if (obj.FinishByDate is null)
+            {
+                obj.FinishByDate = DateTime.Parse("0001-01-01 00:00:00.0000000");
+            }
 
-            return LoadList(currentL);
 
+            if (ModelState.IsValid)
+            {
+                main_db.ToDo.Add(obj);
+                main_db.SaveChanges();
+
+                return LoadList(currentL);
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Edit(int? id, string currentL)
@@ -79,8 +96,10 @@ namespace ToDoListApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(ToDoList obj, string currentL)
         {
-           obj.ListName= currentL;
+            TempData["CurrentList"] = currentL;
 
+            obj.ListName = currentL;
+            ////Asign owner of new task
             if (User.Identity.IsAuthenticated)
             {
                 obj.UserName = User.Identity.Name;
@@ -89,35 +108,25 @@ namespace ToDoListApp.Controllers
             {
                 obj.UserName = "Guest";
             }
+            //If no date has been selected, assign it the default value
+            if (obj.FinishByDate is null)
+            {
+                obj.FinishByDate = DateTime.Parse("0001-01-01 00:00:00.0000000");
+            }
 
-           main_db.ToDo.Update(obj);
-           main_db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                main_db.ToDo.Update(obj);
+                main_db.SaveChanges();
 
-            return LoadList(currentL);
+                return LoadList(currentL);
+            }
+
+            return View();
 
         }
 
         public IActionResult Delete(int? id, string currentL)
-        {
-            TempData["CurrentList"] = currentL;
-
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var taskFromDb = main_db.ToDo.Find(id);
-
-            if (taskFromDb == null)
-            {
-                return NotFound();
-            }
-
-            return View(taskFromDb);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id, string currentL)
         {
             var obj = main_db.ToDo.Find(id);
 
@@ -134,10 +143,10 @@ namespace ToDoListApp.Controllers
 
         public IActionResult DeleteList(string listName)
         {
-
-            foreach (ToDoList obj in main_db.ToDo) 
+            //Go through and delete all items from list.
+            foreach (ToDoList obj in main_db.ToDo)
             {
-                if(obj.ListName == listName && obj.UserName == User.Identity.Name)
+                if (obj.ListName == listName && obj.UserName == User.Identity.Name)
                 {
                     main_db.ToDo.Remove(obj);
                 }
@@ -192,7 +201,7 @@ namespace ToDoListApp.Controllers
             return View("LoadTemplate", GetListFromTemplate(templateName));
         }
 
-        public IActionResult SaveTemplate(string templateName, string listName) 
+        public IActionResult SaveTemplate(string templateName, string listName)
         {
             List<ToDoList> tdList = new List<ToDoList>();
 
@@ -208,11 +217,11 @@ namespace ToDoListApp.Controllers
             return LoadList(tdList[0].ListName);
         }
 
-        public IActionResult SaveAsTemplate(string listName) 
+        public IActionResult SaveAsTemplate(string templateName, string listName)
         {
             string filepath;
             //If user is signed in, check if they already have a custom directory for templates, if not, create one
-            if(User.Identity.IsAuthenticated) 
+            if (User.Identity.IsAuthenticated)
             {
                 filepath = "wwwroot/Templates/" + User.Identity.Name;
 
@@ -232,13 +241,13 @@ namespace ToDoListApp.Controllers
             //Write the tasks to the new template text file
             using (StreamWriter writer = System.IO.File.CreateText(filepath))
             {
-                foreach(ToDoList obj in main_db.ToDo )
+                foreach (ToDoList obj in main_db.ToDo)
                 {
-                    if(obj.ListName == listName && User.Identity.Name == obj.UserName)                 
+                    if (obj.ListName == templateName && User.Identity.Name == obj.UserName)
                     {
                         writer.WriteLine(obj.Task);
                     }
-                    
+
                 }
             }
 
@@ -256,75 +265,76 @@ namespace ToDoListApp.Controllers
 
         }
 
-        public List<ToDoList> GetList(IEnumerable<ToDoList> objToDoList, string name, int tableType = 0 )
+        public List<ToDoList> GetList(IEnumerable<ToDoList> objToDoList, string name, int tableType = 0)
         {
             List<ToDoList> tdList = new List<ToDoList>();
 
             tdList = objToDoList.ToList();
 
+            string nameToSave;
+
             if (User.Identity.IsAuthenticated)
             {
-                //Getting accurate list of tasks depending on list chosen. Removes them from list if they don't belong to the user
-                foreach (ToDoList item in tdList.ToList())
-                {
-                    if (item.ListName == name && item.UserName == User.Identity.Name)
-                    {
-                        switch(tableType)
-                        {
-                            case 0:
-                                continue;
-                            case 1:
-                                if(!item.ImportantTask)
-                                {
-                                    tdList.Remove(item);
-                                    continue;
-                                }
-                                else
-                                {
-                                    continue;
-                                }                  
-                            case 2:
-                                if(DateTime.Compare(item.FinishByDate, DateTime.Today) <= 0 && item.FinishByDate != DateTime.Parse("0001-01-01 00:00:00.0000000"))
-                                {
-                                    continue;
-                                }
-                                else
-                                {
-                                    tdList.Remove(item);
-                                    continue;
-                                }
-
-                            default:
-                                break;
-                        }
-                       
-                        continue;
-                    }
-                    else
-                    {
-                        tdList.Remove(item);
-                    }
-                }
+                nameToSave = User.Identity.Name;
             }
             else
             {
-                //Getting list for a "Guest", aka not signed in.
-                foreach (ToDoList item in tdList.ToList())
+                nameToSave = "Guest";
+            }
+
+
+            //Getting accurate list of tasks depending on list chosen. Removes them from list if they don't belong to the user. Options in switch are for different filters. 1 = imporant, 2 = overdue
+            foreach (ToDoList item in tdList.ToList())
+            {
+                if (item.ListName == name && item.UserName == nameToSave)
                 {
-                    if (item.ListName == name && item.UserName == "Guest")
+                    switch (tableType)
                     {
-                        continue;
+                        case 0:
+                            continue;
+                        case 1:
+                            if (!item.ImportantTask)
+                            {
+                                tdList.Remove(item);
+                                continue;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        case 2:
+                            if (item.FinishByDate != null)
+                            {
+                                //If task is not completed and task is past it's due by date, show it
+                                if (DateTime.Compare((DateTime)item.FinishByDate, DateTime.Today) <= 0 && item.FinishByDate != DateTime.Parse("0001-01-01 00:00:00.0000000") && !item.IsCompleted)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    tdList.Remove(item);
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                tdList.Remove(item);
+                                continue;
+                            }
+
+                        default:
+                            break;
                     }
-                    else
-                    {
-                        tdList.Remove(item);
-                    }
+
+                    continue;
+                }
+                else
+                {
+                    tdList.Remove(item);
                 }
             }
             return tdList;
         }
-
-
 
         public List<ToDoList> GetListFromTemplate(string templateName)
         {
@@ -377,6 +387,22 @@ namespace ToDoListApp.Controllers
             }
 
             return tdList;
+        }
+
+        public IActionResult UpdateListName(string newListName, string currentListName)
+        {
+            //If the listname in the main has been updated, loop through and update it here too
+            foreach(ToDoList obj in main_db.ToDo)
+            {
+                if(obj.ListName == currentListName && obj.UserName == User.Identity.Name) 
+                {
+                    obj.ListName = newListName;
+                    main_db.Update(obj);
+                    main_db.SaveChanges();
+                }
+            }
+
+            return RedirectToAction("Index", "ListMain", null);
         }
 
 

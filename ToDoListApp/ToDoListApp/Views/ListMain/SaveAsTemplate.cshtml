@@ -1,0 +1,29 @@
+﻿@model ListMain
+
+@{string templateName = TempData["TemplateName"].ToString();}
+
+
+<h1 style="text-align:center"> New Template</h1>
+
+<form method="Post" asp-action="SaveAsTemplate" asp-route-templateName="@templateName">
+    <div class="border p-3 mt-4">
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="row pb-2">
+                <h2 class="text-primary"> Name of the new template: </h2>
+                <hr />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ListName"></label>
+                <input asp-for="ListName" class="form-control" />
+                <span asp-validation-for="ListName" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-success" style="width:150px"> Save Template </button>
+
+        }
+
+
+
+    </div>
+</form>

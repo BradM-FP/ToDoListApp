@@ -22,8 +22,8 @@
         </div>
         <br />
         <div class="form-control">
-            <label asp-for="FinishByDate" class="form-check-label">Finish By:</label>
-            <input asp-for="FinishByDate" asp-format="{0:dd/MM/yyy HH:mm}" type="date" />
+            <label asp-for="FinishByDate">Finish By:</label>
+            <input asp-for="@Model.FinishByDate" type="date"/>
 
         </div>
         <br />
