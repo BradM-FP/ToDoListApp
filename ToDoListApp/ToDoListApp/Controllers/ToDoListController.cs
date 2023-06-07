@@ -398,10 +398,10 @@ namespace ToDoListApp.Controllers
                 {
                     obj.ListName = newListName;
                     main_db.Update(obj);
-                    main_db.SaveChanges();
+                    
                 }
             }
-
+            main_db.SaveChanges();
             return RedirectToAction("Index", "ListMain", null);
         }
 

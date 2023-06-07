@@ -12,8 +12,8 @@ using ToDoListApp.Data;
 namespace ToDoListApp.Migrations.ToDoListApp
 {
     [DbContext(typeof(ToDoListAppContext))]
-    [Migration("20230501092250_NewMigration3")]
-    partial class NewMigration3
+    [Migration("20230607094706_IdentityTables")]
+    partial class IdentityTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -12,8 +12,8 @@ using ToDoListApp.Data;
 namespace ToDoListApp.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20230519105428_AddDateColumn")]
-    partial class AddDateColumn
+    [Migration("20230607094247_ToDoListTables")]
+    partial class ToDoListTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,6 @@ namespace ToDoListApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -54,7 +53,7 @@ namespace ToDoListApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("FinishByDate")
+                    b.Property<DateTime?>("FinishByDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("ImportantTask")
@@ -64,7 +63,6 @@ namespace ToDoListApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ListName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Task")
@@ -72,7 +70,6 @@ namespace ToDoListApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
