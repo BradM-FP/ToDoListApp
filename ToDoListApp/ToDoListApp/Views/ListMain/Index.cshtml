@@ -29,10 +29,9 @@ else
      @*going through each row of data*@
 
      @{bool UserHasLists = false;
+     
       @foreach(var obj in Model)
             {
-            @* @if (obj.IsCompleted)
-            {*@
             <tr style="text-align:center">
                 @if (User.Identity.IsAuthenticated)
                 {
@@ -78,5 +77,12 @@ else
     <a asp-controller="ListMain" asp-action="LoadTemplate" class="btn btn-info" style="width:300px">
         Load List from a Template
     </a>
+
+    @if (!UserHasLists)
+    {
+        <a asp-controller="ListMain" asp-action="AddNewList" class="btn btn-info" style="width:300px">
+            Create Your First List
+        </a>
+    }
 
 </div>

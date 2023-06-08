@@ -207,9 +207,18 @@ namespace ToDoListApp.Controllers
 
             tdList = GetListFromTemplate(templateName);
 
+
+
             foreach (ToDoList obj in tdList)
             {
                 obj.ListName = listName;
+
+                //If no date has been selected, assign it the default value
+                if (obj.FinishByDate is null)
+                {
+                    obj.FinishByDate = DateTime.Parse("0001-01-01 00:00:00.0000000");
+                }
+
                 main_db.Add(obj);
                 main_db.SaveChanges();
             }
