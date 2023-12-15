@@ -29,6 +29,8 @@ namespace ToDoListApp.Controllers
         public IActionResult AddNewTask(string currentL)
         {
             TempData["CurrentList"] = currentL;
+		//test thing
+
 
             return View();
         }
@@ -63,7 +65,7 @@ namespace ToDoListApp.Controllers
             {
                 main_db.ToDo.Add(obj);
                 main_db.SaveChanges();
-
+//test
                 return LoadList(currentL);
             }
             else
