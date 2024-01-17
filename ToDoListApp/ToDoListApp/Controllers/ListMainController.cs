@@ -39,6 +39,7 @@ namespace ToDoListApp.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
+                //Testing
                 obj.UserName = User.Identity.Name;
             }
             else
